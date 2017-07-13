@@ -5,12 +5,18 @@ fun is_older(date1: int * int * int, date2: int * int * int) =
   if #1 date1 < #1 date2
   then true
   else
-      if #2 date1 < #2 date2
-      then true
-      else
-	  if #3 date1 < #3 date2
+      if #1 date1 = #1 date2
+      then
+	  if #2 date1 < #2 date2
 	  then true
-	  else false;
+	  else
+	      if #2 date1 = #2 date2
+	      then
+		  if #3 date1 < #3 date2
+		  then true
+		  else false
+	      else false
+      else false;
 
 (* 2 *)
 fun number_in_month(dates: (int * int * int) list, month: int) =
@@ -91,27 +97,9 @@ fun oldest(dates: (int * int * int) list) =
 	    else
 		let val tl_ans = oldest_helper (tl dates)
 		in
-		    let fun older(date1: int * int * int, date2: int * int * int) =
-			  if #1 date1 < #1 date2
-			  then true
-			  else
-			      if #1 date1 = #1 date2
-			      then
-				  if #2 date1 < #2 date2
-				  then true
-				  else
-				      if #2 date1 = #2 date2
-				      then
-					  if #3 date1 < #3 date2
-					  then true
-					  else false
-				      else false
-			      else false
-		    in
-			if older (hd dates, tl_ans)
-			then hd dates
-			else tl_ans
-		    end
+		    if is_older (hd dates, tl_ans)
+		    then hd dates
+		    else tl_ans
 		end
       in
 	  SOME(oldest_helper dates)
