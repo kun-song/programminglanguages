@@ -18,6 +18,21 @@ fun is_older(date1: int * int * int, date2: int * int * int) =
 	      else false
       else false;
 
+(* 使用逻辑操作符更加清晰，相对 if else ... *)
+fun is_older_better(date1: int * int * int, date2: int * int * int) =
+  let
+      val y1 = #1 date1
+      val y2 = #1 date2
+      val m1 = #2 date1
+      val m2 = #2 date2
+      val d1 = #3 date1
+      val d2 = #3 date2
+  in
+      if y1 < y2 orelse (y1 = y2 andalso m1 < m2) orelse (y1 = y2 andalso m1 = m2 andalso d1 < d2)
+      then true
+      else false
+  end;
+  
 (* 2 *)
 fun number_in_month(dates: (int * int * int) list, month: int) =
   if null dates
@@ -29,6 +44,11 @@ fun number_in_month(dates: (int * int * int) list, month: int) =
 	  then 1 + tl_ans
 	  else tl_ans
       end;
+(* if else 也是 expression，可以放在任何表达式可以出现的地方 *)
+fun number_in_month2(dates: (int * int * int) list, month: int) =
+  if null dates
+  then 0
+  else (if #2 (hd dates) = month then 1 else 0) + number_in_month2(tl dates, month);
 
 (* 3 *)
 fun number_in_months(dates: (int * int * int) list, months: int list) =
@@ -91,7 +111,7 @@ fun oldest(dates: (int * int * int) list) =
   if null dates
   then NONE
   else
-      let fun oldest_helper(dates: (int * int * int) list) =
+      let fun oldest_helper dates = (* 不需要使用 (int * int * int) list 指明 dates 的类型 *)
 	    if null (tl dates)
 	    then hd dates
 	    else
