@@ -124,3 +124,52 @@ fun oldest(dates: (int * int * int) list) =
       in
 	  SOME(oldest_helper dates)
       end;
+
+(* 12，先去重，在调用 3 *)
+fun number_in_months_challenge(dates: (int * int * int) list, months: int list) =
+  let
+      fun inside(month: int, months: int list) =
+	if null months
+	then false
+	else
+	    if month = hd months
+	    then true
+	    else inside(month, tl months)
+		   
+      fun filter months =
+	if null months
+	then []
+	else
+	    let val tl_ans = filter(tl months)
+	    in
+		if inside(hd months, tl months)
+		then tl_ans
+		else hd months :: tl_ans
+	    end
+  in
+      number_in_months(dates, filter months)
+  end;
+
+fun dates_in_months_challenge(dates: (int * int * int) list, months: int list) =
+  let
+      fun inside(month: int, months: int list) =
+	if null months
+	then false
+	else
+	    if hd months = month
+	    then true
+	    else inside(month, tl months)
+
+      fun filter months =
+	if null months
+	then []
+	else
+	    let val tl_ans = filter(tl months)
+	    in
+		if inside(hd months, tl months)
+		then tl_ans
+		else hd months :: tl_ans
+	    end
+  in
+      dates_in_months(dates, filter months)
+  end;
