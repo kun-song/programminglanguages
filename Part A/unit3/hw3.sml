@@ -38,6 +38,15 @@ datatype typ = Anything
 
 val only_capitals = List.filter (fn s => Char.isUpper(String.sub(s, 0)));
 
-val longest_string1 = List.foldl (fn (s1, s2) => if String.size s1 > String.size s2 then s1 else s2) "";
+val longest_string1 = List.foldl (fn (s, acc) => if String.size s > String.size acc then s else acc) "";
 
+val longest_string2 = List.foldl (fn (s, acc) => if String.size s >= String.size acc then s else acc) "";
 
+fun longest_string_helper f = List.foldl (fn (s, acc) => if f(String.size s, String.size acc) then s else acc) "";
+
+(* 部分应用 *)
+val longest_string3 = longest_string_helper (fn (a, b) => a > b);
+val longest_string4 = longest_string_helper (fn (a, b) => a >= b);
+
+(* 组合函数 *)
+val longest_capitalized = longest_string1 o only_capitals;
